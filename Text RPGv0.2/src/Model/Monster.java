@@ -1,39 +1,38 @@
+
 package Model;
 
 import java.util.ArrayList;
 
-
-public class Item {
+public class Monster {
     
     //Class variables
-    
-    private int itemId;
+    private int monsterId;
     private String name;
     private String desc;
-    public static ArrayList<Item> itemList = new ArrayList<Item>();
-       
-    //Constructor with no initial values
-    public Item() {
+    public static ArrayList<Monster> monsterList = new ArrayList<Monster>();
+    
+    //Create an an empty Monster object
+    public Monster() {
         
     }
     
-    //Constructor with name and desc
-    public Item(String name, String desc) {
+    //Create a Monster with name and desc
+    public Monster(String name, String desc) {
         this.name = name;
         this.desc = desc;
     }
     
-    //Setters & Getters
-    public int getItemId() {
-        return this.itemId;
+    //Setters abd Getters
+    public int getMonsterId() {
+        return this.monsterId;
     }
     
-    public void setItemId(int newItemId) {
-        this.itemId = newItemId;
+    public void setMonsterId(int newMonsterId) {
+        this.monsterId = newMonsterId;
     }
     
     public String getName() {
-        return this.name;
+        return name;
     }
     
     public void setName(String newName) {
@@ -47,5 +46,5 @@ public class Item {
     public void setDesc(String newDesc) {
         this.desc = newDesc;
     }
- 
+    
 }

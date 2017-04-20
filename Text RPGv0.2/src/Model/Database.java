@@ -33,11 +33,27 @@ public class Database {
     private static final String ROOMS_COLUMN_EXIT_4 = "exit4";
     private static final String ROOMS_COLUMN_IMAGE = "image";
     private static final String ROOMS_COLUMN_ITEM = "item";
+    private static final String ROOMS_COLUMN_MONSTER = "monster";
     //table items
     private static final String TABLE_ITEMS = "items";
     private static final String ITEMS_COLUMN_ITEM_ID = "item_id";
     private static final String ITEMS_COLUMN_ITEM_NAME = "item_name";
     private static final String ITEMS_COLUMN_ITEM_DESC = "item_desc";
+    //table inventory
+    private static final String TABLE_INVENTORY = "inventory";
+    private static final String INV_COLUMN_INV_ID = "inv_id";
+    private static final String INV_COLUMN_USER_ID = "user_id";
+    private static final String INV_COLUMN_ITEM1_ID = "item1_id";
+    private static final String INV_COLUMN_ITEM2_ID = "item2_id";
+    private static final String INV_COLUMN_ITEM3_ID = "item3_id";
+    private static final String INV_COLUMN_ITEM4_ID = "item4_id";
+    private static final String INV_COLUMN_ITEM5_ID = "item5_id";
+    private static final String INV_COLUMN_ITEM6_ID = "item6_id";
+    //table monster
+    private static final String TABLE_MONSTERS = "monsters";
+    private static final String MONSTERS_COLUMN_MONSTER_ID = "monster_id";
+    private static final String MONSTERS_COLUMN_MONSTER_NAME = "monster_name";
+    private static final String MONSTERS_COLUMN_MONSTER_DESC = "monster_desc";
     
     
     private static String connString = "jdbc:mysql://localhost:3306/text_rpg";
@@ -67,6 +83,8 @@ public class Database {
                 room.setName(rs.getString(ROOMS_COLUMN_ROOM_NAME));
                 room.setDesc(rs.getString(ROOMS_COLUMN_ROOM_DESC));
                 room.setExits(rs.getInt(ROOMS_COLUMN_EXIT_1), rs.getInt(ROOMS_COLUMN_EXIT_2), rs.getInt(ROOMS_COLUMN_EXIT_3), rs.getInt(ROOMS_COLUMN_EXIT_4));
+                room.setItem(getItemById(rs.getInt(ROOMS_COLUMN_ITEM)));
+                room.setMonster(getMonsterById(rs.getInt(ROOMS_COLUMN_MONSTER)));
                 Room.roomList.add(room); 
             }
         }catch(SQLException e) {
@@ -87,12 +105,34 @@ public class Database {
                 item.setItemId(rs.getInt(ITEMS_COLUMN_ITEM_ID));
                 item.setName(rs.getString(ITEMS_COLUMN_ITEM_NAME));
                 item.setDesc(rs.getString(ITEMS_COLUMN_ITEM_DESC));
-                Player.get().getInv().add(item);
+                Item.itemList.add(item);
             }
         }catch(SQLException e){
             e.printStackTrace();
         }
     }
+    
+    //Grabs the monsters from the database and stores them in an ArrayList
+    public void getMonsters() {
+        Statement stmt = null;
+        //create query
+        String query = "SELECT * FROM " + TABLE_MONSTERS + "";
+        try {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                Monster monster = new Monster();
+                monster.setMonsterId(rs.getInt(MONSTERS_COLUMN_MONSTER_ID));
+                monster.setName(rs.getString(MONSTERS_COLUMN_MONSTER_NAME));
+                monster.setDesc(rs.getString(MONSTERS_COLUMN_MONSTER_DESC));
+                Monster.monsterList.add(monster);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+    
+    
     
     //Returns ONE room according to the ID given
     public Room getRoomById(int roomId) {
@@ -114,6 +154,8 @@ public class Database {
                 int exit3 = rs.getInt(ROOMS_COLUMN_EXIT_3);
                 int exit4 = rs.getInt(ROOMS_COLUMN_EXIT_4);
                 room.setExits(exit1, exit2, exit3, exit4); 
+                room.setItem(getItemById(rs.getInt(ROOMS_COLUMN_ITEM)));
+                room.setMonster(getMonsterById(rs.getInt(ROOMS_COLUMN_MONSTER)));
             }
         }catch(SQLException e) {
             e.printStackTrace();
@@ -141,6 +183,28 @@ public class Database {
             e.printStackTrace();
         }
         return item;
+    }
+    
+    //Returns ONE monster according to the ID given
+    public Monster getMonsterById(int monsterId) {
+        //Initialize variables and objects
+        Statement stmt = null;
+        Monster monster = new Monster();
+        //create query
+        String query = "SELECT * FROM " + TABLE_MONSTERS + " WHERE " + MONSTERS_COLUMN_MONSTER_ID + " = " + monsterId + "";
+        try {
+            stmt = connection.createStatement();
+            //execute query
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                monster.setMonsterId(rs.getInt(MONSTERS_COLUMN_MONSTER_ID));
+                monster.setName(rs.getString(MONSTERS_COLUMN_MONSTER_NAME));
+                monster.setDesc(rs.getString(MONSTERS_COLUMN_MONSTER_DESC));
+            }
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return monster;
     }
    
     public static ImageIcon getImageById(int roomId) {
@@ -206,4 +270,26 @@ public class Database {
         }  
         return hasItem;
     }
+    
+    public boolean removeItemFromRoom(int roomId) {
+        //Initialize variables and objects
+        Statement stmt = null;
+        boolean itemRemoved = false;
+        //create query
+        String query = "UPDATE " + TABLE_ROOMS + " SET " + ROOMS_COLUMN_ITEM + " = 0 WHERE " + ROOMS_COLUMN_ROOM_ID + " = " + roomId + "";
+        try {
+            stmt = connection.createStatement();
+            //execute;
+            ResultSet rs = stmt.executeQuery(query);
+            if(rs.next()) {
+                itemRemoved = true;
+            }
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return itemRemoved;
+    }
+    
+    
 }

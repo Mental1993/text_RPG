@@ -159,16 +159,16 @@ public class mainMenu extends javax.swing.JApplet {
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         int confirm = JOptionPane.showOptionDialog(this,
-                    "Are You Sure to Close this Application?",
-                    "Exit Confirmation", JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE, null, null, null);
+            "Are You Sure to Close this Application?",
+            "Exit Confirmation", JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE, null, null, null);
             if (confirm == JOptionPane.YES_OPTION) {
                 System.exit(0);
             }
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void btnNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewGameActionPerformed
-        
+       
     }//GEN-LAST:event_btnNewGameActionPerformed
 
 

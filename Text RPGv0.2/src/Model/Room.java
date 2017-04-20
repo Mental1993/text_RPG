@@ -11,6 +11,7 @@ public class Room {
     private String name;
     private String desc;
     private Item item;
+    private Monster monster;
     private int[] exits = new int[4]; //1->N, 2->W, 3->S, 4->E
     public static Room currRoom;
     public Movement movement = new Movement();
@@ -78,6 +79,18 @@ public class Room {
     
     public void setItem(Item newItem) {
         this.item = newItem;
+    }
+    
+    public void removeItem() {
+        currRoom.item = null;
+    }
+    
+    public Monster getMonster() {
+        return this.monster;
+    }
+    
+    public void setMonster(Monster newMonster) {
+        this.monster = newMonster;
     }
    
     public void setExits(int exit1, int exit2, int exit3, int exit4) {

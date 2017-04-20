@@ -46,6 +46,7 @@ public class Player {
     public ArrayList<Item> getInv() {
         return inventory;
     }
+    
     public void setCurrRoom(int newCurrRoom) {
         this.currRoom = newCurrRoom;
     }
@@ -70,12 +71,13 @@ public class Player {
     
     public String pickItem(int itemId) {
         String output = "";
-        if(db.hasItem(Room.currRoom.getRoomId(), itemId)) {
-            output = "You picked this item";
+        if((db.hasItem(Room.currRoom.getRoomId(), itemId)) && (Room.currRoom.getItem() != null)) {
+            output = db.getItemById(itemId).getName() + " has been added to your inventory.";
             inventory.add(db.getItemById(itemId));
+            Room.currRoom.removeItem();
             return output;
         }else {
-            output = "No such Item exists in this room.";
+            output = db.getItemById(itemId).getName() + " doesn't exist in the room.";
             return output;
         }
     }

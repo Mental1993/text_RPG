@@ -8,6 +8,14 @@ import Controller.mainController;
 import Model.Database;
 import Model.Room;
 import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.Timer;
 
 public class mainScreen extends javax.swing.JApplet{
     
@@ -54,18 +62,36 @@ public class mainScreen extends javax.swing.JApplet{
         }
         
         controller = new mainController();
-        
-        
         db = new Database();
+        ImageIcon bgImgPanel = new ImageIcon("img/frame.png");
+        JLabel background = new JLabel(bgImgPanel);
         
         db.connect();
         db.getRooms();
         Room.currRoom = Room.roomList.get(0);
-        setSize(880,500);
+        setSize(900,500);
         getContentPane().setBackground(new Color(255, 191, 128));
         TFinput.addActionListener(action);
-        controller.updateImage(Limage, Database.getImageById(Room.currRoom.getRoomId()));
-        
+        controller.updateImage(Limage, Database.getImageById(Room.currRoom.getRoomId()));     
+        //update timer
+        SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm:ss a", Locale.ENGLISH);
+        Timer SimpleTimer = new Timer(1000, new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                mainController.currDate = new Date();
+                String formatted = dateFormat.format(mainController.currDate);
+                if(formatted.contains("PM")) {
+                    //System.out.println("It's pm now");
+                    mainController.isNight = true;
+                }else {
+                    //System.out.println("It's am now");
+                    mainController.isNight = false;
+                }
+                Ltime.setText(formatted);
+            }
+            
+        });
+        SimpleTimer.start();
         
         welcomeMessage();
 
@@ -81,7 +107,6 @@ public class mainScreen extends javax.swing.JApplet{
     private void initComponents() {
 
         TFinput = new javax.swing.JTextField();
-        Limage = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         TAoutput = new javax.swing.JTextArea();
         Ltime = new javax.swing.JLabel();
@@ -95,6 +120,7 @@ public class mainScreen extends javax.swing.JApplet{
         mpCurr = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         mpMax = new javax.swing.JLabel();
+        Limage = new javax.swing.JLabel();
 
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
@@ -104,11 +130,9 @@ public class mainScreen extends javax.swing.JApplet{
         TFinput.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         TFinput.setName(""); // NOI18N
 
-        Limage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Limage.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-
         jScrollPane1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
+        TAoutput.setEditable(false);
         TAoutput.setBackground(new java.awt.Color(229, 162, 97));
         TAoutput.setColumns(20);
         TAoutput.setFont(new java.awt.Font("Tempus Sans ITC", 0, 18)); // NOI18N
@@ -123,7 +147,6 @@ public class mainScreen extends javax.swing.JApplet{
         Ltime.setFont(new java.awt.Font("Times New Roman", 3, 18)); // NOI18N
         Ltime.setForeground(new java.awt.Color(182, 98, 7));
         Ltime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Ltime.setText("06:00 AM");
         Ltime.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
         hpBox.setBackground(new java.awt.Color(0, 194, 6));
@@ -210,6 +233,9 @@ public class mainScreen extends javax.swing.JApplet{
                 .addGap(0, 8, Short.MAX_VALUE))
         );
 
+        Limage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Limage.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -221,16 +247,16 @@ public class mainScreen extends javax.swing.JApplet{
                     .addComponent(TFinput))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Limage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(52, 52, 52)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(Ltime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(hpBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(mpBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 27, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                        .addComponent(Limage, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -245,8 +271,9 @@ public class mainScreen extends javax.swing.JApplet{
                             .addComponent(Ltime, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(15, 15, 15))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(Limage, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(88, 88, 88)
+                        .addGap(26, 26, 26)
+                        .addComponent(Limage, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(157, 157, 157)
                         .addComponent(hpBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(mpBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -276,7 +303,7 @@ public class mainScreen extends javax.swing.JApplet{
     mainController controller;
     
     public void start() {
-        
+        System.out.print("HIHI");
     }
     
     Action action = new AbstractAction() {
