@@ -16,7 +16,7 @@ public class Item {
     public Item() {
         
     }
-    
+
     //Constructor with name and desc
     public Item(String name, String desc) {
         this.name = name;

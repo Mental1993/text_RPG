@@ -46,8 +46,9 @@ public class Movement {
     public String lookAround() {
         String output = "";
         output += "You are at Room " + Room.currRoom.getRoomId()+ "\n" + Room.currRoom.getName();
-        if(Room.currRoom.getItem() != null) {
-            output += "A " + Room.currRoom.getItem().getName() + " is on the ground.";
+        if(Room.currRoom.getItem().getName() != null) {
+            output += Room.currRoom.getItem().getName() + " is on the ground.";
+            System.out.println(Room.currRoom.getItem().getItemId());
         }
         return output;
     }

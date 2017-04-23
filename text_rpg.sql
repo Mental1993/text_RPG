@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Φιλοξενητής: 127.0.0.1
--- Χρόνος δημιουργίας: 20 Απρ 2017 στις 06:54:15
+-- Χρόνος δημιουργίας: 23 Απρ 2017 στις 21:48:42
 -- Έκδοση διακομιστή: 10.1.16-MariaDB
 -- Έκδοση PHP: 7.0.9
 
@@ -56,7 +56,8 @@ CREATE TABLE `items` (
 INSERT INTO `items` (`item_id`, `item_name`, `item_desc`) VALUES
 (1, 'Dusty Key', 'This key might be useful to unlock a door.'),
 (2, 'Fire Torch', 'On the wall, there is a Fire Torch. If only there was a way to light fire...'),
-(3, 'Bronse Sword', 'A heavy two-handed sword.');
+(3, 'Bronse Sword', 'A heavy two-handed sword.'),
+(4, 'Iron sword', 'Forged by dwarfs, from the Iron Hills.');
 
 -- --------------------------------------------------------
 
@@ -102,14 +103,15 @@ CREATE TABLE `rooms` (
 --
 
 INSERT INTO `rooms` (`room_id`, `room_name`, `room_desc`, `exit1`, `exit2`, `exit3`, `exit4`, `image`, `item`, `monster`) VALUES
-(1, 'Starting Room', 'Rusting spikes line the walls and ceiling of this chamber. The dusty floor shows no sign that the walls move over it, but you can see the skeleton of some humanoid impaled on some wall spikes nearby.', 0, 0, 2, 0, 'room1.jpg', 3, 0),
-(2, 'room 2 name', 'This room is so big, you can''t even see where it''s borders... Exits lie on every possible direction.', 1, 3, 6, 4, 'room2.png', 1, 0),
+(1, 'Starting Room', 'Rusting spikes line the walls and ceiling of this chamber. The dusty floor shows no sign that the walls move over it, but you can see the skeleton of some humanoid impaled on some wall spikes nearby.', 0, 9, 2, 0, 'room1.jpg', 0, 0),
+(2, 'room 2 name', 'This room is so big, you can''t even see where it''s borders... Exits lie on every possible direction.', 1, 3, 6, 4, 'room2.png', 0, 0),
 (3, 'room 3 name', 'A small room with no exits other than the one you just got in...A Fire Torch lies on the ground...Well, this could be usefull..', 0, 0, 0, 2, 'room3.png', 0, 0),
 (4, 'room 4 name', 'This otherwise bare room has one distinguishing feature. The stone around one of the other doors has been pulled over its edges, as though the rock were as soft as clay and could be moved with fingers. The stone of the door and wall seems hastily molded together.', 0, 2, 5, 0, 'room4.jpg', 0, 0),
-(5, 'room 5 name', 'Fire crackles and pops in a small cooking fire set in the center of the room. The smoke from a burning rat on a spit curls up through a hole in the ceiling. Around the fire lie several fur blankets and a bag. It looks like someone camped here until not long ago, but then left in a hurry.', 4, 6, 0, 0, 'room5.png', 0, 0),
+(5, 'room 5 name', 'Fire crackles and pops in a small cooking fire set in the center of the room. The smoke from a burning rat on a spit curls up through a hole in the ceiling. Around the fire lie several fur blankets and a bag. It looks like someone camped here until not long ago, but then left in a hurry.', 4, 6, 0, 0, 'room5.png', 3, 0),
 (6, 'room 6 name', 'A flurry of bats suddenly flaps through the doorway, their screeching barely audible as they careen past your heads. They flap past you into the rooms and halls beyond. The room from which they came seems barren at first glance.', 2, 0, 7, 5, 'room6.jpg', 0, 0),
-(7, 'Room 7 ', 'The scent of earthy decay assaults your nose upon peering through the open door to this room. Smashed bookcases and their sundered contents litter the floor. Paper rots in mold-spotted heaps, and shattered wood grows white fungus.', 6, 0, 0, 8, 'room7.jpg', 0, 0),
-(8, 'Room 8', 'This tiny room holds a curious array of machinery. Winches and levers project from every wall, and chains with handles dangle from the ceiling. On a nearby wall, you note a pictogram of what looks like a scythe on a chain. ', 0, 7, 0, 0, 'room8.png', 0, 0);
+(7, 'Room 7 ', 'The scent of earthy decay assaults your nose upon peering through the open door to this room. Smashed bookcases and their sundered contents litter the floor. Paper rots in mold-spotted heaps, and shattered wood grows white fungus.', 6, 0, 0, 8, 'room7.jpg', 2, 0),
+(8, 'Room 8', 'This tiny room holds a curious array of machinery. Winches and levers project from every wall, and chains with handles dangle from the ceiling. On a nearby wall, you note a pictogram of what looks like a scythe on a chain. ', 0, 7, 0, 0, 'room8.png', 0, 0),
+(9, 'Secret Room 1', 'You are lucky to find this room!', 0, 0, 0, 1, 'room9.png', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -171,7 +173,7 @@ ALTER TABLE `inventory`
 -- AUTO_INCREMENT για πίνακα `items`
 --
 ALTER TABLE `items`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT για πίνακα `monsters`
 --
@@ -181,7 +183,7 @@ ALTER TABLE `monsters`
 -- AUTO_INCREMENT για πίνακα `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT για πίνακα `users`
 --

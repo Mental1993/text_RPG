@@ -99,6 +99,5 @@ public class Room {
         this.exits[2] = exit3;
         this.exits[3] = exit4;
     } 
-    
-    
+ 
 }

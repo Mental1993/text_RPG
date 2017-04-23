@@ -1,6 +1,11 @@
 package Model;
 
+import Controller.mainController;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.Timer;
 
 public class Player {
     
@@ -13,6 +18,10 @@ public class Player {
     
     //Sigleton pattern
     public static Player get() { 
+        if(player == null) {
+            player = new Player();
+        }
+        
         return player; 
     }
     
@@ -71,13 +80,15 @@ public class Player {
     
     public String pickItem(int itemId) {
         String output = "";
-        if((db.hasItem(Room.currRoom.getRoomId(), itemId)) && (Room.currRoom.getItem() != null)) {
+        if((db.hasItem(Room.currRoom.getRoomId(), itemId)) ) {
             output = db.getItemById(itemId).getName() + " has been added to your inventory.";
             inventory.add(db.getItemById(itemId));
             Room.currRoom.removeItem();
+            db.removeItemFromRoom(Room.currRoom.getRoomId());
             return output;
         }else {
             output = db.getItemById(itemId).getName() + " doesn't exist in the room.";
+            System.out.println(Room.currRoom.getRoomId() + " " + itemId);
             return output;
         }
     }

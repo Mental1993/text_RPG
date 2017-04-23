@@ -1,6 +1,6 @@
 package Model;
 
-import View.mainScreen;
+import View.game;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -11,12 +11,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
-public class Database {
-    
+public class Database { 
     //Database connection variables
     private static String username = "root";
     private static String password = "";
-    
     //table users
     private static final String TABLE_USERS = "users";
     private static final String USERS_COLUMN_USER_ID = "user_id";
@@ -55,7 +53,6 @@ public class Database {
     private static final String MONSTERS_COLUMN_MONSTER_NAME = "monster_name";
     private static final String MONSTERS_COLUMN_MONSTER_DESC = "monster_desc";
     
-    
     private static String connString = "jdbc:mysql://localhost:3306/text_rpg";
     public static Connection connection;
     
@@ -65,7 +62,7 @@ public class Database {
             connection = DriverManager.getConnection(connString, username, password);
             System.out.println("Connection is OK");
         } catch (SQLException ex) {
-            Logger.getLogger(mainScreen.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(game.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -131,9 +128,7 @@ public class Database {
             e.printStackTrace();
         }
     }
-    
-    
-    
+
     //Returns ONE room according to the ID given
     public Room getRoomById(int roomId) {
         //Initialize variables and objects
@@ -162,7 +157,7 @@ public class Database {
         }
         return room;
     }
-    
+   
     //Returns ONE item according to the ID given
     public Item getItemById(int itemId) {
         //Initialize variables and objects
@@ -245,7 +240,6 @@ public class Database {
         }catch(SQLException e) {
             e.printStackTrace();
         }
-        
         return player;
     }
     
@@ -276,19 +270,72 @@ public class Database {
         Statement stmt = null;
         boolean itemRemoved = false;
         //create query
-        String query = "UPDATE " + TABLE_ROOMS + " SET " + ROOMS_COLUMN_ITEM + " = 0 WHERE " + ROOMS_COLUMN_ROOM_ID + " = " + roomId + "";
+        String query = "UPDATE " + TABLE_ROOMS + " SET " + ROOMS_COLUMN_ITEM + " = 0 WHERE " + ROOMS_COLUMN_ROOM_ID + " = " + roomId;
         try {
             stmt = connection.createStatement();
             //execute;
-            ResultSet rs = stmt.executeQuery(query);
-            if(rs.next()) {
+            int count = stmt.executeUpdate(query);
+            if(count != 0) {
                 itemRemoved = true;
             }
         }catch(SQLException e) {
             e.printStackTrace();
         }
-        
         return itemRemoved;
+    }
+    
+    public boolean editExit(int roomId, int[] exits) {
+        //Initialize variables and objects
+        Statement stmt = null;
+        boolean exitEdited = false;
+        //create query
+        String query = "UPDATE " + TABLE_ROOMS + " SET " + ROOMS_COLUMN_EXIT_1 + " = " + exits[0] + ", " + ROOMS_COLUMN_EXIT_2 + " = " + exits[1]
+                + ", " + ROOMS_COLUMN_EXIT_3 + " = " + exits[2] + ", " + ROOMS_COLUMN_EXIT_4 + " = " + exits[3] + " WHERE " + ROOMS_COLUMN_ROOM_ID + " = " + roomId;
+        try {
+            stmt = connection.createStatement();
+            //execute
+            int count = stmt.executeUpdate(query);
+            if(count != 0) {
+                exitEdited=  true;
+            }
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return exitEdited;
+    } 
+    
+    public void fillRoomsWithItems() {
+        //Initialize variables and objects
+        int max = 10;
+        int min = 1;
+        Statement stmt = null;
+        String query = "";
+        for(int i = 2; i < 9; i++) {
+            int random = (int)(Math.random() * max + min);
+            if(random < 5) {
+                 query = "UPDATE " + TABLE_ROOMS + " SET " + ROOMS_COLUMN_ITEM + " = 0 WHERE " + ROOMS_COLUMN_ROOM_ID + " = " + i;
+            }else if(random < 7) {
+                 query = "UPDATE " + TABLE_ROOMS + " SET " + ROOMS_COLUMN_ITEM + " = 3 WHERE " + ROOMS_COLUMN_ROOM_ID + " = " + i;
+            }else if(random < 8) {
+                 query = "UPDATE " + TABLE_ROOMS + " SET " + ROOMS_COLUMN_ITEM + " = 4 WHERE " + ROOMS_COLUMN_ROOM_ID + " = " + i;
+            }else if(random < 9) {
+                 query = "UPDATE " + TABLE_ROOMS + " SET " + ROOMS_COLUMN_ITEM + " = 2 WHERE " + ROOMS_COLUMN_ROOM_ID + " = " + i;
+            }else {
+                 query = "UPDATE " + TABLE_ROOMS + " SET " + ROOMS_COLUMN_ITEM + " = 1 WHERE " + ROOMS_COLUMN_ROOM_ID + " = " + i;
+            }
+            try {
+                stmt = connection.createStatement();
+                stmt.executeUpdate(query);
+            }catch(SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        
+        
+        
+        
     }
     
     

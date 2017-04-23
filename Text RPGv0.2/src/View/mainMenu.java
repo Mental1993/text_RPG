@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
  */
 public class mainMenu extends javax.swing.JApplet {
 
-    mainScreen gameScreen;
+
     /** Initializes the applet mainMenu */
     @Override
     public void init() {
@@ -55,9 +55,7 @@ public class mainMenu extends javax.swing.JApplet {
         }
         
         
-        gameScreen = new mainScreen();
-        gameScreen.init();
-        setSize(480,460);
+        setSize(480,420);
         getContentPane().setBackground(Color.darkGray);
     }
 
@@ -99,6 +97,11 @@ public class mainMenu extends javax.swing.JApplet {
         btnAbout.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         btnAbout.setForeground(new java.awt.Color(255, 255, 255));
         btnAbout.setText("About");
+        btnAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAboutActionPerformed(evt);
+            }
+        });
 
         btnExit.setBackground(new java.awt.Color(182, 98, 7));
         btnExit.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
@@ -128,22 +131,21 @@ public class mainMenu extends javax.swing.JApplet {
                         .addGap(174, 174, 174)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(btnExit, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnAbout, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAbout, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnNewGame, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnLoadGame, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(143, 143, 143)
+                        .addGap(144, 144, 144)
                         .addComponent(jLabel1)))
-                .addContainerGap(149, Short.MAX_VALUE))
+                .addContainerGap(148, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addGap(19, 19, 19)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
                 .addComponent(btnNewGame, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -153,7 +155,7 @@ public class mainMenu extends javax.swing.JApplet {
                 .addComponent(btnAbout, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -168,8 +170,14 @@ public class mainMenu extends javax.swing.JApplet {
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void btnNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewGameActionPerformed
-       
+        //this.setVisible(false);
+        new game().setVisible(true);
     }//GEN-LAST:event_btnNewGameActionPerformed
+
+    private void btnAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAboutActionPerformed
+        //this.setVisible(false);
+        new about().setVisible(true);
+    }//GEN-LAST:event_btnAboutActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

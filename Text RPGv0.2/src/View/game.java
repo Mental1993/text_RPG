@@ -1,78 +1,49 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package View;
 
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import Controller.mainController;
 import Model.Database;
 import Model.Room;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
-public class mainScreen extends javax.swing.JApplet{
-    
-    public Database db;
-    
-    
+/**
+ *
+ * @author Mental
+ */
+public class game extends javax.swing.JFrame {
+    mainController controller = new mainController();
+    Database db = new Database();
     /**
-     * Initializes the applet mainScreen
+     * Creates new form NewJFrame
      */
-    @Override
-    public void init() {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(mainScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(mainScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(mainScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(mainScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the applet */
-        try {
-            java.awt.EventQueue.invokeAndWait(new Runnable() {
-                public void run() {
-                    initComponents();
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+    public game() {
+        initComponents();
+        setSize(900,500);
         
-        controller = new mainController();
-        db = new Database();
+        
         ImageIcon bgImgPanel = new ImageIcon("img/frame.png");
         JLabel background = new JLabel(bgImgPanel);
-        
         db.connect();
         db.getRooms();
         Room.currRoom = Room.roomList.get(0);
-        setSize(900,500);
         getContentPane().setBackground(new Color(255, 191, 128));
         TFinput.addActionListener(action);
-        controller.updateImage(Limage, Database.getImageById(Room.currRoom.getRoomId()));     
+        
+        
         //update timer
         SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm:ss a", Locale.ENGLISH);
         Timer SimpleTimer = new Timer(1000, new ActionListener(){
@@ -81,10 +52,8 @@ public class mainScreen extends javax.swing.JApplet{
                 mainController.currDate = new Date();
                 String formatted = dateFormat.format(mainController.currDate);
                 if(formatted.contains("PM")) {
-                    //System.out.println("It's pm now");
                     mainController.isNight = true;
                 }else {
-                    //System.out.println("It's am now");
                     mainController.isNight = false;
                 }
                 Ltime.setText(formatted);
@@ -92,15 +61,25 @@ public class mainScreen extends javax.swing.JApplet{
             
         });
         SimpleTimer.start();
-        
+        //update night or day
+        Timer dayOrNight = new Timer(60000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                controller.updateNight();
+            }
+            
+        });
+        dayOrNight.start();
+        db.fillRoomsWithItems();
         welcomeMessage();
-
+        
+        controller.updateImage(Limage, Database.getImageById(Room.currRoom.getRoomId()));  
     }
 
     /**
-     * This method is called from within the init() method to initialize the
-     * form. WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -122,7 +101,7 @@ public class mainScreen extends javax.swing.JApplet{
         mpMax = new javax.swing.JLabel();
         Limage = new javax.swing.JLabel();
 
-        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         TFinput.setBackground(new java.awt.Color(229, 162, 97));
         TFinput.setFont(new java.awt.Font("Tempus Sans ITC", 0, 18)); // NOI18N
@@ -254,7 +233,7 @@ public class mainScreen extends javax.swing.JApplet{
                             .addComponent(mpBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                         .addComponent(Limage, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(34, 34, 34))))
         );
@@ -277,10 +256,74 @@ public class mainScreen extends javax.swing.JApplet{
                         .addComponent(hpBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(mpBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(161, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
+
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * @param args the command line arguments
+     */
+    
+    
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(game.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(game.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(game.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(game.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new game().setVisible(true);
+            }
+        });
+    }
+    public Action action = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String input = TFinput.getText();
+            
+            TAoutput.append("\n" + input + "\n");
+            TFinput.setText("");
+            controller.proccessInput(input);
+            
+            String output = controller.getTAoutput();
+            controller.updateTextArea(TAoutput, output);
+            TAoutput.setCaretPosition(TAoutput.getDocument().getLength());
+            controller.updateImage(Limage, Database.getImageById(Room.currRoom.getRoomId()));
+        }
+    };
+    
+    
+    public void welcomeMessage() {
+        TAoutput.append("Type \"help\" to view all the commands of the game.\n\n\n");
+        TAoutput.append("You wake up inside a spooky dungeon...Darkness surrounds you and you can barely see anything.\n");
+        TAoutput.append("You feel numb as you try to get on your feet. Weakness through your body.\n");
+        TAoutput.append("You can't tell for how long have you been knocked out.A mysterious sound comes from the south..\n");
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Limage;
@@ -299,37 +342,4 @@ public class mainScreen extends javax.swing.JApplet{
     private javax.swing.JLabel mpMax;
     private javax.swing.JLabel mpText;
     // End of variables declaration//GEN-END:variables
-    
-    mainController controller;
-    
-    public void start() {
-        System.out.print("HIHI");
-    }
-    
-    Action action = new AbstractAction() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String input = TFinput.getText();
-            
-            TAoutput.append("\n" + input + "\n");
-            TFinput.setText("");
-            controller.proccessInput(input);
-            
-            String output = controller.getTAoutput();
-            controller.updateTextArea(TAoutput, output);
-            TAoutput.setCaretPosition(TAoutput.getDocument().getLength());
-            controller.updateImage(Limage, Database.getImageById(Room.currRoom.getRoomId()));
-        }
-    };
-    
-    public void welcomeMessage() {
-        TAoutput.append("Type \"help\" to view all the commands of the game.\n\n\n");
-        TAoutput.append("You wake up inside a spooky dungeon...Darkness surrounds you and you can barely see anything.\n");
-        TAoutput.append("You feel numb as you try to get on your feet. Weakness through your body.\n");
-        TAoutput.append("You can't tell for how long have you been knocked out.A mysterious sound comes from the south..\n");
-    }
-    
-    
-    
-    
 }
