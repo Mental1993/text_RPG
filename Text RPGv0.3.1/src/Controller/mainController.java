@@ -1,4 +1,5 @@
 package Controller;
+import Model.Battle;
 import Model.Database;
 import Model.Player;
 import Model.Movement;
@@ -12,9 +13,11 @@ public class mainController {
 
     //Declare variables and objects
     Movement movement = new Movement();
+    Battle battle = new Battle();
     Database db = new Database();
     public static Date currDate = new Date();
     public static boolean isNight;
+    public static boolean fightMode = false;
     
     String TAoutput;
    
@@ -31,26 +34,27 @@ public class mainController {
     
     //Checks the user input command.
     public void proccessInput(String input){
-        
         input = input.replace(' ', '_');
-        Commands cmd;
-        try {
-            cmd = Commands.valueOf(input.toUpperCase());
-        }catch(Exception e) {
-            cmd = Commands.NONE;
-        }
+        if(!fightMode) {
+            Commands cmd;
+            try { cmd = Commands.valueOf(input.toUpperCase()); }
+            catch(Exception e) { cmd = Commands.NONE; }
             switch(cmd) {
                 case GO_NORTH:
                     TAoutput = movement.north();
+                    TAoutput += battle.monsterExistsInRoom();
                     break;
                 case GO_WEST:
                     TAoutput = movement.west();
+                    TAoutput += battle.monsterExistsInRoom();
                     break;
                 case GO_SOUTH:
                     TAoutput = movement.south();
+                    TAoutput += battle.monsterExistsInRoom();
                     break;
                 case GO_EAST:
                     TAoutput = movement.east();
+                    TAoutput += battle.monsterExistsInRoom();
                     break;
                 case INVENTORY:
                     TAoutput = Player.get().showInventory();
@@ -77,7 +81,7 @@ public class mainController {
                     TAoutput = movement.lookAround();
                     break;
                 case SAVE:
-                    //MISSING ----- SAVE FUNCTION
+                    //MISSING ----- SAVE FUNCTION    
                     break;
                 case NONE:
                     input = input.replace('_', ' ');
@@ -86,8 +90,25 @@ public class mainController {
                 default:
                     input = input.replace('_', ' ');
                     TAoutput = "Invalid command (\"" + input + "\").\nType \"help\" to see all the avaliable commands."; 
+            }
+        }else {
+            FightCommands cmd;
+            try { cmd = FightCommands.valueOf(input.toUpperCase()); }
+            catch(Exception e) { cmd = FightCommands.NONE; }
+            switch(cmd) {
+                case FIGHT:
+                    TAoutput = battle.fight();
+                    break;
+                case RUN:
+                    TAoutput = battle.run();
+                    break;
+                case NONE:
+                    TAoutput = "Choose to FIGHT or RUN";
+                    break;
+                default:
+                    TAoutput = "Choose to FIGHT or RUN";
+            }
         }
-        
     }
     
     //Updates the textArea accordingly.
@@ -99,6 +120,11 @@ public class mainController {
     public void updateImage(JLabel Limage, ImageIcon img) {
         Limage.setIcon(img);
         
+    }
+    
+    //update gold
+    public void updateGold(JLabel gold) {
+        gold.setText(Integer.toString(Player.get().getGold()));
     }
     
     public void updateNight() {
@@ -147,6 +173,12 @@ public class mainController {
         LOOK,
         EXIT,
         SAVE,
+        NONE
+    }
+    
+    public enum FightCommands {
+        FIGHT,
+        RUN,
         NONE
     }
     

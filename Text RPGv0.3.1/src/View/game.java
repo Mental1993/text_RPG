@@ -66,14 +66,15 @@ public class game extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 controller.updateNight();
-            }
-            
+            }     
         });
         dayOrNight.start();
         db.fillRoomsWithItems();
+        db.fillRoomsWithMonsters();
         welcomeMessage();
         
         controller.updateImage(Limage, Database.getImageById(Room.currRoom.getRoomId()));  
+        controller.updateGold(goldValue);
     }
 
     /**
@@ -95,10 +96,9 @@ public class game extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         hpMax = new javax.swing.JLabel();
         mpBox = new javax.swing.JPanel();
-        mpText = new javax.swing.JLabel();
-        mpCurr = new javax.swing.JLabel();
+        goldLabel = new javax.swing.JLabel();
+        goldValue = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        mpMax = new javax.swing.JLabel();
         Limage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -170,20 +170,15 @@ public class game extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        mpBox.setBackground(new java.awt.Color(0, 255, 255));
+        mpBox.setBackground(new java.awt.Color(255, 255, 51));
         mpBox.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
-        mpText.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        mpText.setText("MP :");
+        goldLabel.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        goldLabel.setText("Gold :");
 
-        mpCurr.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        mpCurr.setText("20");
-
-        jLabel2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        jLabel2.setText("/");
-
-        mpMax.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        mpMax.setText("20");
+        goldValue.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        goldValue.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        goldValue.setText("0");
 
         javax.swing.GroupLayout mpBoxLayout = new javax.swing.GroupLayout(mpBox);
         mpBox.setLayout(mpBoxLayout);
@@ -191,24 +186,21 @@ public class game extends javax.swing.JFrame {
             mpBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mpBoxLayout.createSequentialGroup()
                 .addGap(33, 33, 33)
-                .addComponent(mpText)
+                .addComponent(goldLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(goldValue, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mpCurr)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mpMax)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addComponent(jLabel2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         mpBoxLayout.setVerticalGroup(
             mpBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mpBoxLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mpBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(mpText)
-                    .addComponent(mpCurr)
-                    .addComponent(jLabel2)
-                    .addComponent(mpMax))
+                    .addComponent(goldLabel)
+                    .addComponent(goldValue)
+                    .addComponent(jLabel2))
                 .addGap(0, 8, Short.MAX_VALUE))
         );
 
@@ -314,6 +306,7 @@ public class game extends javax.swing.JFrame {
             controller.updateTextArea(TAoutput, output);
             TAoutput.setCaretPosition(TAoutput.getDocument().getLength());
             controller.updateImage(Limage, Database.getImageById(Room.currRoom.getRoomId()));
+            controller.updateGold(goldValue);
         }
     };
     
@@ -330,6 +323,8 @@ public class game extends javax.swing.JFrame {
     private javax.swing.JLabel Ltime;
     private javax.swing.JTextArea TAoutput;
     private javax.swing.JTextField TFinput;
+    private javax.swing.JLabel goldLabel;
+    private javax.swing.JLabel goldValue;
     private javax.swing.JPanel hpBox;
     private javax.swing.JLabel hpCurrent;
     private javax.swing.JLabel hpMax;
@@ -338,8 +333,5 @@ public class game extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel mpBox;
-    private javax.swing.JLabel mpCurr;
-    private javax.swing.JLabel mpMax;
-    private javax.swing.JLabel mpText;
     // End of variables declaration//GEN-END:variables
 }

@@ -19,6 +19,9 @@ public class Database {
     private static final String TABLE_USERS = "users";
     private static final String USERS_COLUMN_USER_ID = "user_id";
     private static final String USERS_COLUMN_USER_NAME = "user_name";
+    private static final String USERS_COLUMN_USER_HP = "p_hp";
+    private static final String USERS_COLUMN_USER_ATTACK = "p_attack";
+    private static final String USERS_COLUMN_USER_GOLD = "p_gold";
     private static final String USERS_COLUMN_CURR_ROOM = "curr_room";
     //table rooms
     private static final String TABLE_ROOMS = "rooms";
@@ -52,6 +55,9 @@ public class Database {
     private static final String MONSTERS_COLUMN_MONSTER_ID = "monster_id";
     private static final String MONSTERS_COLUMN_MONSTER_NAME = "monster_name";
     private static final String MONSTERS_COLUMN_MONSTER_DESC = "monster_desc";
+    private static final String MONSTERS_COLUMN_MONSTER_HP = "monster_hp";
+    private static final String MONSTERS_COLUMN_MONSTER_ATTACK = "monster_attack";
+    private static final String MONSTERS_COLUMN_MONSTER_GOLD = "m_gold";
     
     private static String connString = "jdbc:mysql://localhost:3306/text_rpg";
     public static Connection connection;
@@ -122,6 +128,9 @@ public class Database {
                 monster.setMonsterId(rs.getInt(MONSTERS_COLUMN_MONSTER_ID));
                 monster.setName(rs.getString(MONSTERS_COLUMN_MONSTER_NAME));
                 monster.setDesc(rs.getString(MONSTERS_COLUMN_MONSTER_DESC));
+                monster.setHP(rs.getInt(MONSTERS_COLUMN_MONSTER_HP));
+                monster.setAttack(rs.getInt(MONSTERS_COLUMN_MONSTER_ATTACK));
+                monster.setGold(rs.getInt(MONSTERS_COLUMN_MONSTER_GOLD));
                 Monster.monsterList.add(monster);
             }
         }catch(SQLException e){
@@ -195,6 +204,9 @@ public class Database {
                 monster.setMonsterId(rs.getInt(MONSTERS_COLUMN_MONSTER_ID));
                 monster.setName(rs.getString(MONSTERS_COLUMN_MONSTER_NAME));
                 monster.setDesc(rs.getString(MONSTERS_COLUMN_MONSTER_DESC));
+                monster.setHP(rs.getInt(MONSTERS_COLUMN_MONSTER_HP));
+                monster.setAttack(rs.getInt(MONSTERS_COLUMN_MONSTER_ATTACK));
+                monster.setGold(rs.getInt(MONSTERS_COLUMN_MONSTER_GOLD));
             }
         }catch(SQLException e) {
             e.printStackTrace();
@@ -235,6 +247,9 @@ public class Database {
             while(rs.next()) {
                 player.setUserId(rs.getInt(USERS_COLUMN_USER_ID));
                 player.setName(rs.getString(USERS_COLUMN_USER_NAME));
+                player.setHP(rs.getInt(USERS_COLUMN_USER_HP));
+                player.setAttack(rs.getInt(USERS_COLUMN_USER_ATTACK));
+                player.setGold(rs.getInt(USERS_COLUMN_USER_GOLD));
                 player.setCurrRoom(rs.getInt(USERS_COLUMN_CURR_ROOM));
             }
         }catch(SQLException e) {
@@ -248,7 +263,7 @@ public class Database {
         Statement stmt = null;
         boolean hasItem = false;
         //create query
-        String query = "SELECT " + ROOMS_COLUMN_ITEM + " FROM " + TABLE_ROOMS + " WHERE " + ROOMS_COLUMN_ROOM_ID + " = " + roomId + "";
+        String query = "SELECT " + ROOMS_COLUMN_ITEM + " FROM " + TABLE_ROOMS + " WHERE " + ROOMS_COLUMN_ROOM_ID + " = " + roomId;
         try {
             stmt = connection.createStatement();
             //execute
@@ -263,6 +278,28 @@ public class Database {
             e.printStackTrace();
         }  
         return hasItem;
+    }
+    
+    public boolean hasMonster(int roomId) {
+        //Initialize variables and objects
+        Statement stmt = null;
+        boolean hasMonster = false;
+        //create query
+        String query = "SELECT " + ROOMS_COLUMN_MONSTER + " FROM " + TABLE_ROOMS + " WHERE " + ROOMS_COLUMN_ROOM_ID + " = " + roomId;
+        try {
+            stmt = connection.createStatement();
+            //execute
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                int monster_id = rs.getInt(ROOMS_COLUMN_MONSTER);
+                if(monster_id != 0) {
+                    hasMonster = true;
+                }
+            }
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return hasMonster;
     }
     
     public boolean removeItemFromRoom(int roomId) {
@@ -330,12 +367,51 @@ public class Database {
             }catch(SQLException e) {
                 e.printStackTrace();
             }
+        }  
+    }
+    
+    public void fillRoomsWithMonsters() {
+        //initialize variables and objects
+        int max = 10;
+        int min = 1;
+        Statement stmt = null;
+        String query = "";
+        for(int i = 2; i < 9; i++) {
+            int random = (int)(Math.random() * max + min);
+            if(random < 1) {
+                query = "UPDATE " + TABLE_ROOMS + " SET " + ROOMS_COLUMN_MONSTER + " = 4 WHERE " + ROOMS_COLUMN_ROOM_ID + " = " + i;
+            }else if(random < 3){
+                query = "UPDATE " + TABLE_ROOMS + " SET " + ROOMS_COLUMN_MONSTER + " = 2 WHERE " + ROOMS_COLUMN_ROOM_ID + " = " + i;
+            }else if(random < 6) {
+                query = "UPDATE " + TABLE_ROOMS + " SET " + ROOMS_COLUMN_MONSTER + " = 1 WHERE " + ROOMS_COLUMN_ROOM_ID + " = " + i;
+            }else {
+                query = "UPDATE " + TABLE_ROOMS + " SET " + ROOMS_COLUMN_MONSTER + " = 3 WHERE " + ROOMS_COLUMN_ROOM_ID + " = " + i;
+            }
+            try {
+                stmt = connection.createStatement();
+                stmt.executeUpdate(query);
+            }catch(SQLException e) {
+                e.printStackTrace();
+            }
+        }  
+    }
+    
+    public int findMonsterId(int roomId) {
+        int monster_id = 0;
+        if(hasMonster(roomId)) {
+            Statement stmt = null;
+            String query = "SELECT " + ROOMS_COLUMN_MONSTER + " FROM " + TABLE_ROOMS + " WHERE " + ROOMS_COLUMN_ROOM_ID + " = " + roomId;
+            try {
+                stmt = connection.createStatement();
+                ResultSet rs = stmt.executeQuery(query);
+                while(rs.next()) {
+                    monster_id = rs.getInt(ROOMS_COLUMN_MONSTER);
+                }
+            }catch(SQLException e) {
+                e.printStackTrace();
+            }
         }
-        
-        
-        
-        
-        
+        return monster_id;
     }
     
     

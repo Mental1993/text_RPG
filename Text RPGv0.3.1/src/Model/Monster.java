@@ -8,6 +8,7 @@ public class Monster {
     private int monsterId;
     private String name;
     private String desc;
+    private int m_hp, m_attack, m_gold;
     public static ArrayList<Monster> monsterList = new ArrayList<Monster>();
     
     //Create an an empty Monster object
@@ -19,6 +20,15 @@ public class Monster {
     public Monster(String name, String desc) {
         this.name = name;
         this.desc = desc;
+    }
+    
+    //Create a Monster with name, desc, hp,attack and gold
+    public Monster(String name, String desc, int m_hp, int m_attack) {
+        this.name = name;
+        this.desc = desc;
+        this.m_hp = m_hp;
+        this.m_attack = m_attack;
+        this.m_gold = m_gold;
     }
     
     //Setters abd Getters
@@ -46,4 +56,27 @@ public class Monster {
         this.desc = newDesc;
     }
     
+    public int getAttack() {
+        return this.m_attack;
+    }
+    
+    public void setAttack(int newAttack) {
+        this.m_attack = newAttack;
+    }
+    
+    public int getHP() {
+        return this.m_hp;
+    }
+    
+    public void setHP(int newHP) {
+        this.m_hp = newHP;
+    }
+    
+    public int getGold() {
+        return this.m_gold;
+    }
+    
+    public void setGold(int newGold) {
+        this.m_gold = newGold;
+    }
 }
